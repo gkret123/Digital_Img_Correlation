@@ -45,14 +45,14 @@ This project relies on the following libraries and tools:
 
 # Data Source
 
-VIC-3D is a non-contact, optical measurement system that uses digital image correlation (DIC) to measure full-field displacements and strains on the surface of an object under load. The system uses a stereo pair of cameras to capture images of the object from two different angles. The images are then processed to determine the 3D coordinates of points on the object's surface. The system can be used to measure the deformation of a wide range of materials, including metals, plastics, composites, and biological tissues.
+VIC-3D is a non-contact, optical measurement system that uses digital image correlation (DIC) to measure full-field displacements and strains on the surface of an object under load. The system uses a stereo pair of cameras to capture images of the object from two different angles. The images are then processed to determine the 3D coordinates of points on the object's surface. The system can be used to measure the deformation of a wide range of materials, including metals, plastics, composites, and biological tissues. See Documentation Folder for more details.
 
 # Authors and Contact
 
-For further questions or support, contact:
-    - Gabriel Kret [gabriel.kret@cooper.edu]
-    - Maria Alvarado [maria.alvarado@cooper.edu]
-    - Jonas Margono [jonas.margono@cooper.edu]
+For further questions or support, contact:   
+    - Gabriel Kret [gabriel.kret@cooper.edu]  
+    - Maria Alvarado [maria.alvarado@cooper.edu]  
+    - Jonas Margono [jonas.margono@cooper.edu]  
 
 # File Structure
 
