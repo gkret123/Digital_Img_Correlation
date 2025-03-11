@@ -1,0 +1,1 @@
+df_image_0.columns = [H3 for H3 in third_level_header]
