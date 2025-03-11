@@ -56,11 +56,4 @@ For further questions or support, contact:
 
 # File Structure
 
-project/
-├── README.md                     # This file
-├── data/
-│   └── Extracted Data from VIC-EDU_Poly.csv  # Raw data file
-├── Image_Data/                   # Directory containing preprocessed CSV files per image/force
-├── scripts/
-│   └── Preprocessing_VIC_Data.py # Main preprocessing script
-
+TBD

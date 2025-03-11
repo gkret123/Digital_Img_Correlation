@@ -22,8 +22,9 @@ import os
 
 
 # Define the input file name and the chunk size
-input_file = 'Extracted Data from VIC-EDU_Poly.csv'
-
+import os
+script_dir = os.path.dirname(os.path.abspath(__file__))
+input_file = os.path.join(script_dir, 'Input_Data', 'Extracted Data from VIC-EDU_Poly.csv')
 #***I recognize "Chunk" is a bad name for this, but I am using it to refer to the data collected from each image/force value***
 chunk_size = 204 # 204 lines per file becuase vic software takes a 200 data point line and adds 4 lines of header
 
@@ -108,4 +109,4 @@ ff_all_images_stacked_L = {}
 for grp in range(num_groups):
     stacked_df_L = pd.concat([ff_all_images[f"Image_{img_idx}"][f"ff_image_L{grp}"] for img_idx in range(num_chunks)])
     ff_all_images_stacked_L[f"ff_image_L{grp}"] = stacked_df_L
-#print(ff_all_images_stacked_L["ff_image_L1"])
+print(ff_all_images_stacked_L["ff_image_L1"])
