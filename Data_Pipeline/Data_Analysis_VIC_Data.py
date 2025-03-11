@@ -19,8 +19,6 @@ import seaborn as sns
 import Preprocessing_VIC_Data as PP
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
-
-
 """
 for key, value in PP.ff_all_images.items():
     print(f"Key: {key}, Value: {value}")
