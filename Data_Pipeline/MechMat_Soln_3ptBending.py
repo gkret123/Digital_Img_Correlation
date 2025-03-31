@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 
 # Beam geometry and material properties
 L = 0.12  # Beam length in meters (12 cm)
-width = 1.5 / 39.3700787  # Convert 1.5 inches to meters
-height = 1.5 / 39.3700787  # Convert 1.5 inches to meters
+width = 0.5 / 39.3700787  # Convert 1.5 inches to meters
+height = 0.5 / 39.3700787  # Convert 1.5 inches to meters
 poisson = 0.33  # Poisson's ratio 
 E = 69e9      # Young's modulus in Pascals (example value for Aluminum 6061)
 
@@ -78,6 +78,7 @@ def shear_stress_distribution(y, V, width, height):
       τ(y) = (3/2)*(V/(width*height))*(1 - (2*y/height)**2)
     """
     return (3/2) * (V / (width * height)) * (1 - (2 * y / height)**2)
+    
 
 def main():
     # User inputs for the loading condition at a specific x coordinate along the beam
@@ -100,9 +101,9 @@ def main():
     delta_max = F * L**3 / (48 * E * I)
     print(f"Maximum Deflection: {delta_max:.6e} m")
     
-    # =======================
+    
     # Cross-Section Analysis (at x = x_coord)
-    # =======================
+    
     # Define vertical positions (y) across the cross-section (neutral axis at y = 0)
     y = np.linspace(-height / 2, height / 2, 100)
     # Compute axial strain distribution at the given x coordinate
@@ -119,7 +120,7 @@ def main():
     for i in range(0, len(y), 5):
         print(f"y = {y[i]:.4f} m, εₓ = {epsilon_x[i]:.6e}, εᵧ = {epsilon_y[i]:.6e}, σ = {sigma[i]:.6e} Pa, τ = {tau[i]:.6e} Pa")
     
-    # ------------------------------
+    
     # Plot 1: Axial Strain vs. y (at x = x_coord)
     plt.figure(figsize=(6,4))
     plt.plot(epsilon_x, y, 'b-', label='Axial Strain, εₓ')
@@ -129,7 +130,7 @@ def main():
     plt.grid(True)
     plt.legend()
     
-    # ------------------------------
+    
     # Plot 2: Bending Stress vs. y (at x = x_coord)
     plt.figure(figsize=(6,4))
     plt.plot(sigma, y, 'r-', label='Bending Stress, σ')
@@ -139,7 +140,7 @@ def main():
     plt.grid(True)
     plt.legend()
     
-    # ------------------------------
+    
     # Plot 3: Shear Stress vs. y (at x = x_coord)
     plt.figure(figsize=(6,4))
     plt.plot(tau, y, 'm-', label='Shear Stress, τ')
@@ -149,7 +150,7 @@ def main():
     plt.grid(True)
     plt.legend()
     
-    # ------------------------------
+    
     # Plot 4 & 5: Heatmaps of εₓ and εᵧ in the cross-section (at x = x_coord)
     # Create a grid for the cross-section (y: vertical, z: horizontal)
     ny_cs, nz = 50, 50
@@ -174,37 +175,33 @@ def main():
     plt.ylabel("Vertical coordinate, y (m)")
     plt.title("Heatmap of Lateral Strain (εᵧ)\nin Cross-Section (at x = {:.4f} m)".format(x_coord))
     
-    # ===============================
+
     # Beam Diagram Plots (along x)
-    # ===============================
     x_beam = np.linspace(0, L, 200)
     M_beam = bending_moment_array(x_beam, L, F)
     V_beam = shear_force_array(x_beam, L, F)
     v_beam = deflection_array(x_beam, L, F, E, I)
     
-    # ------------------------------
-    # Plot 6: Bending Moment Diagram
-    plt.figure(figsize=(6,4))
-    plt.plot(x_beam, M_beam, 'k-', label='Bending Moment, M(x)')
-    plt.xlabel("Beam length, x (m)")
-    plt.ylabel("Bending Moment, M (N·m)")
-    plt.title("Bending Moment Diagram")
-    plt.grid(True)
-    plt.legend()
     
-    # ------------------------------
-    # Plot 7: Shear Force Diagram
-    plt.figure(figsize=(6,4))
-    plt.plot(x_beam, V_beam, 'c-', label='Shear Force, V(x)')
-    plt.xlabel("Beam length, x (m)")
-    plt.ylabel("Shear Force, V (N)")
-    plt.title("Shear Force Diagram")
-    plt.grid(True)
-    plt.legend()
+    # Plot 6/7: Shear and bending moment diagrams
+    fig, ax = plt.subplots(2, figsize=(6,4))
+    ax[0].plot(x_beam, V_beam, 'c-', label='Shear Force, V(x)')
+    ax[0].set_xlabel("Beam length, x (m)")
+    ax[0].set_ylabel("Shear Force, V (N)")
+    ax[0].set_title("Shear Force Diagram")
+    ax[0].grid(True)
+    ax[0].legend()
+    ax[1].plot(x_beam, M_beam, 'k-', label='Bending Moment, M(x)')
+    ax[1].set_xlabel("Beam length, x (m)")
+    ax[1].set_ylabel("Bending Moment, M (N·m)")
+    ax[1].set_title("Bending Moment Diagram")
+    ax[1].grid(True)
+    ax[1].legend()
+    plt.tight_layout()
     
-    # ------------------------------
+    
     # Plot 8: Deflection Curve
-    plt.figure(figsize=(6,4))
+    plt.figure(figsize=(12,10))
     plt.plot(x_beam, v_beam, 'g-', label='Deflection, v(x)')
     plt.xlabel("Beam length, x (m)")
     plt.ylabel("Vertical Deflection, v (m)")
@@ -212,7 +209,7 @@ def main():
     plt.grid(True)
     plt.legend()
     
-    # ------------------------------
+    
     # NEW: Heatmaps of Strains Across the Entire Beam
     # Create a grid covering the entire beam: x from 0 to L and y from -height/2 to height/2.
     nx_entire, ny_entire = 2000, 500
