@@ -144,6 +144,10 @@ def save_data(ff_all_images, ff_all_images_stacked_Force, ff_all_images_stacked_
     print("Data saved successfully.")
     #the data is now ready for further analysis
 
+
+
+    
+
 def main():
     input_file, chunk_size = get_input_file_and_chunk_size()
     metrics_per_line, forces = get_metrics_and_forces(9)
@@ -153,6 +157,8 @@ def main():
     ff_all_images = add_force_and_line_columns(ff_all_images, num_chunks, num_groups, forces)
     ff_all_images_stacked_Force, ff_all_images_stacked_L = stack_by_force_and_line(ff_all_images, num_chunks, num_groups)
     save_data(ff_all_images, ff_all_images_stacked_Force, ff_all_images_stacked_L)
+
+    print("Preprocessing complete.")
 
 if __name__ == '__main__':
     main()
