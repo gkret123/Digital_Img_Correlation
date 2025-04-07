@@ -3,17 +3,30 @@ import matplotlib.pyplot as plt
 
 # Beam geometry and material properties
 L = 0.12  # Beam length in meters (12 cm)
-width = 0.5 / 39.3700787  # Convert 1.5 inches to meters
-height = 0.5 / 39.3700787  # Convert 1.5 inches to meters
+width = 0.019  # meters
+height = 0.019 # meters
+        
+# Note: The inner dimensions are only used if the beam is hollow.
+inner_width = 0.013
+inner_height = inner_width  # meters 
 poisson = 0.33  # Poisson's ratio 
 E = 69e9      # Young's modulus in Pascals (example value for Aluminum 6061)
+yield_strength = 276e6  # Yield strength in Pascals (example value for Aluminum 6061)
 
-def compute_inertia(width, height):
+def compute_inertia(width, height, inner_width = None, inner_height = None):
     """
-    Compute the second moment of area (I) for a rectangular cross-section.
-    I = (width * height^3) / 12.
+    Compute the second moment of area (I) for a rectangular or hollow rectangular cross-section.
     """
-    return (width * height**3) / 12.0
+    if inner_width is not None and inner_height is not None:
+        # Hollow section
+        I_outer = (width * height**3) / 12.0
+        I_inner = (inner_width * inner_height**3) / 12.0
+        I = I_outer - I_inner
+    else:
+        # Solid section
+        I = (width * height**3) / 12.0
+    return I
+   
 
 def bending_moment(x, L, F):
     """
@@ -43,7 +56,7 @@ def shear_force(x, L, F):
         return -F / 2.0
 
 def shear_force_array(x_array, L, F):
-    """ Vectorized shear force over an array of x coordinates """
+    """  shear force over an array of x coordinates """
     return np.array([shear_force(x, L, F) for x in x_array])
 
 def deflection(x, L, F, E, I):
@@ -79,6 +92,33 @@ def shear_stress_distribution(y, V, width, height):
     """
     return (3/2) * (V / (width * height)) * (1 - (2 * y / height)**2)
     
+def elastic_or_plastic(F, I):
+    
+    #Determine if the beam is in the elastic or plastic region for the force case applied
+
+    c = height / 2  # Distance from the neutral axis to the outer fiber
+    # Calculate the maximum bending stress allowed
+    M_yield = yield_strength * I / c  # Yield moment
+    # Calculate the maximum load that can be applied without yielding
+    P_yield = 4 * M_yield / L  # Yield load, for a simply supported beam with a central load
+    # Calculate the maximum bending stress induced by the applied load
+    M = bending_moment(L / 2, L, F)  # Maximum moment at the center of the beam
+    sigma_max = M * c / I  # Maximum bending stress induced by the applied load
+
+    print("The critical load is: ", P_yield, "N")
+    print("The applied load is: ", F, "N")
+    print("The maximum bending stress from the applied load is: ", sigma_max/10**6, "MPa")
+    print("The yield strength is: ", yield_strength/10**6, "MPa")
+
+    #compare with yield strength
+    if sigma_max > yield_strength:
+        print("The beam is in the plastic region, the force applied induced a bending stress higher than the yield strength.")
+        return "Plastic"
+    else:
+        print("The beam is in the elastic region.")
+        return "Elastic"
+    
+
 
 def main():
     # User inputs for the loading condition at a specific x coordinate along the beam
@@ -86,7 +126,7 @@ def main():
     x_coord = float(input("Enter the x coordinate along the beam (m): "))
     
     # Calculate the moment of inertia
-    I = compute_inertia(width, height)
+    I = compute_inertia(width, height, inner_width, inner_height)
     # Bending moment at the chosen x coordinate
     M = bending_moment(x_coord, L, F)
     # Shear force at the chosen x coordinate
@@ -120,7 +160,9 @@ def main():
     for i in range(0, len(y), 5):
         print(f"y = {y[i]:.4f} m, εₓ = {epsilon_x[i]:.6e}, εᵧ = {epsilon_y[i]:.6e}, σ = {sigma[i]:.6e} Pa, τ = {tau[i]:.6e} Pa")
     
-    
+    #bending region
+    elastic_or_plastic(F, I)
+
     # Plot 1: Axial Strain vs. y (at x = x_coord)
     plt.figure(figsize=(6,4))
     plt.plot(epsilon_x, y, 'b-', label='Axial Strain, εₓ')
@@ -210,7 +252,7 @@ def main():
     plt.legend()
     
     
-    # NEW: Heatmaps of Strains Across the Entire Beam
+    # Heatmaps of Strains Across the Entire Beam
     # Create a grid covering the entire beam: x from 0 to L and y from -height/2 to height/2.
     nx_entire, ny_entire = 2000, 500
     x_entire = np.linspace(0, L, nx_entire)

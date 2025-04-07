@@ -32,7 +32,10 @@ def get_input_file_and_chunk_size():
 def get_metrics_and_forces(number_of_metrics=9):
     metrics_per_line = 9 #we export 9 metrics per line from VIC-EDU software (we can add more or less if needed)
     #Metrics chosen: ["X [mm]","Y [mm]","Z [mm]","U [mm]","V [mm]","W [mm]","exx [1] - Lagrange","eyy [1] - Lagrange","exy [1] - Lagrange"]
+    #polyurathane beam force test, 7 images taken at different forces, 0N, 38N, 92N, 140N, 183N, 226N, and 0N again (after the test was completed)
     forces = [0, 38, 92, 140, 183, 226, np.nan] #nan is for the last image, which is after the test hasd been completed, force is zero but dont want to confuse with the first image
+    #Al6061 force test
+    #forces = [0, 0.1823, 0.279, 0.3414, 0.4430, 0.5440, 0.643, 0.745, 0.8423, 0.943, 1.046, 1.146, 1.246, 1.346, 1.446, 1.546, 1.646, 1.746, 1.847, 1.946, 2.048, 2.291, 2.537, 2.783, 3.032, 3.277, 3.524, 3.766, 4.005]
     return metrics_per_line, forces
 
 def split_file_into_chunks(input_file, chunk_size, forces):
