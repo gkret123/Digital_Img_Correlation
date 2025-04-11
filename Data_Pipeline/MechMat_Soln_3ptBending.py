@@ -204,14 +204,14 @@ def main():
     eyy_cs = - poisson * exx_cs
     
     plt.figure(figsize=(6,5))
-    cp = plt.contourf(Z_cs, Y_cs, exx_cs, 200, cmap='viridis')
+    cp = plt.contourf(Z_cs, Y_cs, exx_cs, 200, cmap='gist_rainbow')
     plt.colorbar(cp, label='Axial Strain, εₓ')
     plt.xlabel("Horizontal coordinate, z (m)")
     plt.ylabel("Vertical coordinate, y (m)")
     plt.title("Heatmap of Axial Strain (εₓ)\nin Cross-Section (at x = {:.4f} m)".format(x_coord))
     
     plt.figure(figsize=(6,5))
-    cp2 = plt.contourf(Z_cs, Y_cs, eyy_cs, 200, cmap='plasma')
+    cp2 = plt.contourf(Z_cs, Y_cs, eyy_cs, 200, cmap='gist_rainbow')
     plt.colorbar(cp2, label='Lateral Strain, εᵧ')
     plt.xlabel("Horizontal coordinate, z (m)")
     plt.ylabel("Vertical coordinate, y (m)")
@@ -269,7 +269,7 @@ def main():
     
     # Plot 9: Heatmap of Axial Strain (εₓ) across the entire beam
     plt.figure(figsize=(20,5))
-    cp3 = plt.contourf(X_entire, Y_entire, epsilon_x_entire, 500, cmap='viridis')
+    cp3 = plt.contourf(X_entire, Y_entire, epsilon_x_entire, 500, cmap='gist_rainbow')
     plt.colorbar(cp3, label='Axial Strain, εₓ')
     plt.xlabel("Beam length, x (m)")
     plt.ylabel("Vertical position, y (m)")
@@ -277,7 +277,7 @@ def main():
     
     # Plot 10: Heatmap of Lateral Strain (εᵧ) across the entire beam
     plt.figure(figsize=(20,5))
-    cp4 = plt.contourf(X_entire, Y_entire, epsilon_y_entire, 500, cmap='plasma')
+    cp4 = plt.contourf(X_entire, Y_entire, epsilon_y_entire, 500, cmap='gist_rainbow')
     plt.colorbar(cp4, label='Lateral Strain, εᵧ')
     plt.xlabel("Beam length, x (m)")
     plt.ylabel("Vertical position, y (m)")
