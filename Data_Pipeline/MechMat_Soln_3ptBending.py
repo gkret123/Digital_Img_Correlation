@@ -1,17 +1,49 @@
+"""
+3-Point Bending Beam Analysis
+
+Author: Gabriel Kret 
+Instructors: Dr. David Wootton and Dr. Kamau Wright
+Course: ME-360-A: Experimentation
+Date: Spring 2025
+
+
+This script analyzes a simply supported beam subjected to a central load using Mechanics of Materials beam theory.
+It computes the bending moment, shear force, deflection, and strain/stress distributions across the beam's cross-section.
+It also visualizes the results using plots and heatmaps.
+This script is intended to be used alongside the Digital Image Correlation (DIC) analysis of a 3-point bending test.
+The results from this script can be compared with the DIC results to validate the mechanical behavior of the beam.
+"""
+
 import numpy as np
 import matplotlib.pyplot as plt
 
+"""
+F and X_coord are the user inputs for the loading condition at a specific x coordinate along the beam.
+enter a value for F to specify the loading condition you wish to analyze.
+The value of F is the force applied at the center of the beam.
+The script will use this value to calculate the bending moment, shear forces, deflections, etc.
+NOTE: It will also be used to approximate whether the case puts the beam in the elastic or plastic region.
+
+enter a value for X_coord as the position along the beam where you want to analyze the bending moment, shear force, and deflection.
+The value of X_coord is the distance from the left end of the beam to the point where you want to analyze the bending moment, shear force, and deflection.
+"""
+F = 4000  # Applied force in Newtons (example value)
+x_coord = 0.0625 # Position along the beam in meters (example value, 6.25 cm)
+
 # Beam geometry and material properties
-L = 0.12  # Beam length in meters (12 cm)
-width = 0.019  # meters
-height = 0.019 # meters
+
+L = 0.12  # Beam length in meters (12 cm) (measured)
+width = 0.019  # meters (measured)
+height = 0.019 # meters (measured)
         
-# Note: The inner dimensions are only used if the beam is hollow.
-inner_width = 0.013
+# Note: The inner dimensions are only used if the beam is hollow. write 'None' if the beam is solid.
+inner_width = 0.013 #measured
 inner_height = inner_width  # meters 
-poisson = 0.33  # Poisson's ratio 
-E = 69e9      # Young's modulus in Pascals (example value for Aluminum 6061)
-yield_strength = 276e6  # Yield strength in Pascals (example value for Aluminum 6061)
+
+#known/estimated material properties
+poisson = 0.33  # Poisson's ratio (material property)
+E = 69e9      # Young's modulus in Pascals (example value for Aluminum 6061) (Material property)
+yield_strength = 276e6  # Yield strength in Pascals (example value for Aluminum 6061) (Material property)
 
 def compute_inertia(width, height, inner_width = None, inner_height = None):
     """
@@ -121,9 +153,8 @@ def elastic_or_plastic(F, I):
 
 
 def main():
-    # User inputs for the loading condition at a specific x coordinate along the beam
-    F = float(input("Enter the applied force (N): "))
-    x_coord = float(input("Enter the x coordinate along the beam (m): "))
+    # the user inputs for the loading condition at a specific x coordinate along the beam (Force and x position) are defined above
+    
     
     # Calculate the moment of inertia
     I = compute_inertia(width, height, inner_width, inner_height)
@@ -132,14 +163,6 @@ def main():
     # Shear force at the chosen x coordinate
     V = shear_force(x_coord, L, F)
     
-    print("\n--- Beam Analysis Results ---")
-    print(f"Moment of Inertia (I): {I:.6e} m^4")
-    print(f"Bending Moment (M) at x = {x_coord:.4f} m: {M:.6e} N·m")
-    print(f"Shear Force (V) at x = {x_coord:.4f} m: {V:.6e} N")
-    
-    # Maximum deflection for a simply supported beam with a central load
-    delta_max = F * L**3 / (48 * E * I)
-    print(f"Maximum Deflection: {delta_max:.6e} m")
     
     
     # Cross-Section Analysis (at x = x_coord)
@@ -150,15 +173,24 @@ def main():
     epsilon_x = strain_distribution(y, M, E, I)
     # Lateral strain (due to Poisson effect)
     epsilon_y = - poisson * epsilon_x
-    # Bending stress distribution (σ = E * εₓ)
+    # Bending stress distribution (stress = E * strain)
     sigma = E * epsilon_x
     # Shear stress distribution across the height
     tau = shear_stress_distribution(y, V, width, height)
     
-    # Display sample values every 5 points
-    print("\nSample strain/stress values (every 5th point) at x = {:.4f} m:".format(x_coord))
-    for i in range(0, len(y), 5):
+    print("\nSample strain/stress values (every 10th point) at x = {:.4f} m:".format(x_coord))
+    for i in range(0, len(y), 10):
         print(f"y = {y[i]:.4f} m, εₓ = {epsilon_x[i]:.6e}, εᵧ = {epsilon_y[i]:.6e}, σ = {sigma[i]:.6e} Pa, τ = {tau[i]:.6e} Pa")
+    
+    print("\n--- Beam Analysis Results ---")
+
+    print(f"Moment of Inertia (I): {I:.6e} m^4")
+    print(f"Bending Moment (M) at x = {x_coord:.4f} m: {M:.6e} N·m")
+    print(f"Shear Force (V) at x = {x_coord:.4f} m: {V:.6e} N")
+    
+    # Maximum deflection for a simply supported beam with a central load
+    delta_max = F * L**3 / (48 * E * I)
+    print(f"Maximum Deflection: {delta_max:.6e} m")
     
     #bending region
     elastic_or_plastic(F, I)
