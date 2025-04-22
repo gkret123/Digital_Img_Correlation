@@ -174,7 +174,7 @@ def main():
     
     
     
-    # Cross-Section Analysis (at x = x_coord)
+    # Cross-Section Analysis
     
     # Define vertical positions (y) across the cross-section (neutral axis at y = 0)
     y = np.linspace(-height / 2, height / 2, 100)
@@ -238,7 +238,7 @@ def main():
     plt.tight_layout()
     plt.suptitle(f"Strain Distributions in Cross-Section\nat x = {x_coord:.4f} m", fontsize=16)
     
-    # Plot 4-6: Stress distributions vs. y in cross‐section (σₓ, σᵧ, τ)
+    # Plot 4-6: Stress distributions vs. y in cross‐section
     fig, axs = plt.subplots(1, 3, figsize=(18, 4))
 
     # Normal bending stress 
@@ -364,7 +364,7 @@ def main():
     V_grid = np.tile(V_entire, (ny_entire, 1))
     # First compute shear stress distribution
     tau_entire = shear_stress_distribution(Y_entire, V_grid, width, height)
-    # Convert shear stress to shear strain: γ = τ/G
+    # Convert shear stress to shear strain
     gamma_entire = tau_entire / G
 
 
