@@ -199,7 +199,7 @@ def main():
     print("\nBeam Geometry and Material Properties:\n")
 
     print(f"Moment of Inertia (I): {I:.6e} m^4")
-    print(f"Bending Moment (M) at x = {x_coord:.4f} m: {M:.6e} N·m")
+    print(f"Bending Moment (M) at x = {x_coord:.4f} m: {M:.6e} Nm")
     print(f"Shear Force (V) at x = {x_coord:.4f} m: {V:.6e} N")
     
     # Maximum deflection for a simply supported beam with a central load
@@ -327,7 +327,7 @@ def main():
     ax[0].legend()
     ax[1].plot(x_beam, M_beam, 'k-', label='Bending Moment, M(x)')
     ax[1].set_xlabel("Beam length, x (m)")
-    ax[1].set_ylabel("Bending Moment, M (N·m)")
+    ax[1].set_ylabel("Bending Moment, M (Nm)")
     ax[1].set_title("Bending Moment Diagram")
     ax[1].grid(True)
     ax[1].legend()
