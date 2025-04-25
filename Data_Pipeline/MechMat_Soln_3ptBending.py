@@ -228,8 +228,8 @@ def main():
 
     # Shear Strain
     gamma = tau / G
-    axs[2].plot(gamma, y, 'm-', label='Shear Strain, γ')
-    axs[2].set_xlabel("Shear Strain, γ")
+    axs[2].plot(gamma, y, 'm-', label='Shear Strain, εₓᵧ')
+    axs[2].set_xlabel("Shear Strain, εₓᵧ")
     axs[2].set_ylabel("Vertical position, y (m)")
     axs[2].set_title(f"Shear Strain Distribution\n(at x = {x_coord:.4f} m)")
     axs[2].grid(True)
@@ -283,7 +283,7 @@ def main():
     V_cs = shear_force(x_coord, L, F_applied)
     tau_cs = shear_stress_distribution(Y_cs, V_cs, width, height)
     gamma_cs = tau_cs / G
-
+    epsilon_x_y = gamma_cs / 2
     fig, axs = plt.subplots(1, 3, figsize=(18, 5), constrained_layout=True)
 
     # Axial Strain 
@@ -301,11 +301,12 @@ def main():
     axs[1].set_title(f"Lateral Strain (εᵧ)\nCross-Section at x = {x_coord:.4f} m")
 
     # Shear Strain 
-    cp2 = axs[2].contourf(Z_cs, Y_cs, gamma_cs, 200, cmap='gist_rainbow')
-    fig.colorbar(cp2, ax=axs[2], label='Shear Strain, γ')
+    #cp2 = axs[2].contourf(Z_cs, Y_cs, gamma_cs, 200, cmap='gist_rainbow')
+    cp2 = axs[2].contourf(Z_cs, Y_cs, epsilon_x_y, 200, cmap='gist_rainbow') #changed to include exy to match VIC data
+    fig.colorbar(cp2, ax=axs[2], label='Shear Strain, εₓᵧ')
     axs[2].set_xlabel("Horizontal coordinate, z (m)")
     axs[2].set_ylabel("Vertical coordinate, y (m)")
-    axs[2].set_title(f"Shear Strain (γ)\nCross-Section at x = {x_coord:.4f} m")
+    axs[2].set_title(f"Shear Strain (εₓᵧ)\nCross-Section at x = {x_coord:.4f} m")
     
     plt.suptitle(f"Heatmap Display of Strain Distributions in Cross-Section\nat x = {x_coord:.4f} m", fontsize=16)
 
@@ -366,7 +367,7 @@ def main():
     tau_entire = shear_stress_distribution(Y_entire, V_grid, width, height)
     # Convert shear stress to shear strain
     gamma_entire = tau_entire / G
-
+    epsilon_x_y_entire = gamma_entire / 2  # Shear strain (engineering shear strain)
 
     # create subplots with automatic spacing for titles/colorbars
     fig, axs = plt.subplots(3, 1, figsize=(16, 10), constrained_layout=True)
@@ -394,9 +395,11 @@ def main():
     axs[1].set_title("Lateral Strain Distribution Across Entire Beam", pad=12)
 
     # Shear strain
-    cp5 = axs[2].contourf(X_entire, Y_entire, gamma_entire, 500, cmap='gist_rainbow')
-    cb2 = fig.colorbar(cp5, ax=axs[2], label='Shear Strain, γ')
-    vmin2, vmax2 = gamma_entire.min(), gamma_entire.max()
+    #cp5 = axs[2].contourf(X_entire, Y_entire, gamma_entire, 500, cmap='gist_rainbow')
+    cp5 = axs[2].contourf(X_entire, Y_entire, epsilon_x_y_entire, 500, cmap='gist_rainbow') #changed to include exy to match VIC data
+    cb2 = fig.colorbar(cp5, ax=axs[2], label='Shear Strain, εₓᵧ')
+    #vmin2, vmax2 = gamma_entire.min(), gamma_entire.max()
+    vmin2, vmax2 = epsilon_x_y_entire.min(), epsilon_x_y_entire.max() #changed to include exy to match VIC data
     ticks2 = np.linspace(vmin2, vmax2, 8)
     cb2.set_ticks([vmin2, *ticks2, vmax2])
     cb2.ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2e'))
