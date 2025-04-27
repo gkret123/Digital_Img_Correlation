@@ -29,7 +29,7 @@ enter a value for X_coord as the position along the beam where you want to analy
 The value of X_coord is the distance from the left end of the beam to the point where you want to analyze the bending moment, shear force, and deflection.
 """
 F_applied = 4000  # Applied force in Newtons (example value)
-x_coord = 0.0625 # Position along the beam in meters (example value, 6.25 cm)
+x_coord = 0.03 # Position along the beam in meters (example value, 6.25 cm)
 
 # Beam geometry and material properties
 
