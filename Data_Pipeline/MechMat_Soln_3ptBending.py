@@ -17,6 +17,7 @@ The results from this script can be compared with the DIC results to validate th
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
+import os
 
 """
 F_applied and X_coord are the user inputs for the loading condition at a specific x coordinate along the beam.
@@ -209,12 +210,12 @@ def main():
 
 
     # Plot 1–3: Strains vs. y in cross‐section (axial, lateral, shear)
-    fig, axs = plt.subplots(1, 3, figsize=(18, 4))
+    fig, axs = plt.subplots(1, 3, figsize=(24,10))
     # Axial Strain
     axs[0].plot(epsilon_x, y, 'b-', label='Axial Strain, εₓ')
     axs[0].set_xlabel("Axial Strain, εₓ")
     axs[0].set_ylabel("Vertical position, y (m)")
-    axs[0].set_title(f"Axial Strain Distribution\n(at x = {x_coord:.4f} m)")
+    axs[0].set_title(f"Axial Strain Distribution (at x = {x_coord:.4f} m)")
     axs[0].grid(True)
     axs[0].legend()
 
@@ -222,7 +223,7 @@ def main():
     axs[1].plot(epsilon_y, y, 'g-', label='Lateral Strain, εᵧ')
     axs[1].set_xlabel("Lateral Strain, εᵧ")
     axs[1].set_ylabel("Vertical position, y (m)")
-    axs[1].set_title(f"Lateral Strain Distribution\n(at x = {x_coord:.4f} m)")
+    axs[1].set_title(f"Lateral Strain Distribution (at x = {x_coord:.4f} m)")
     axs[1].grid(True)
     axs[1].legend()
 
@@ -231,15 +232,16 @@ def main():
     axs[2].plot(gamma, y, 'm-', label='Shear Strain, εₓᵧ')
     axs[2].set_xlabel("Shear Strain, εₓᵧ")
     axs[2].set_ylabel("Vertical position, y (m)")
-    axs[2].set_title(f"Shear Strain Distribution\n(at x = {x_coord:.4f} m)")
+    axs[2].set_title(f"Shear Strain Distribution (at x = {x_coord:.4f} m)")
     axs[2].grid(True)
     axs[2].legend()
 
-    plt.tight_layout()
+    plt.tight_layout(rect=[0, 0, 1, 0.95])  # leave space for suptitle
     plt.suptitle(f"Strain Distributions in Cross-Section\nat x = {x_coord:.4f} m", fontsize=16)
+    plt.savefig(f"Data_Pipeline\Plots\strain_distributions_x={x_coord:.4f} m.png", dpi=300)  # Save the figure as a PNG file
     
     # Plot 4-6: Stress distributions vs. y in cross‐section
-    fig, axs = plt.subplots(1, 3, figsize=(18, 4))
+    fig, axs = plt.subplots(1, 3, figsize=(24, 10))
 
     # Normal bending stress 
     axs[0].plot(sigma, y, 'r-', label='σₓ (Pa)')
@@ -266,8 +268,9 @@ def main():
     axs[2].grid(True)
     axs[2].legend()
 
-    plt.tight_layout()
+    plt.tight_layout(rect=[0, 0, 1, 0.95]) 
     plt.suptitle(f"Stress Distributions in Cross-Section\nat x = {x_coord:.4f} m", fontsize=16)
+    plt.savefig(f"Data_Pipeline\Plots\stress_distributions_x={x_coord:.4f} m.png", dpi=300)  # Save the figure as a PNG file
     
     # Plots 6-9: Heatmaps at the cross‐section specified
     ny_cs, nz = 50, 50
@@ -333,6 +336,7 @@ def main():
     ax[1].grid(True)
     ax[1].legend()
     plt.tight_layout()
+    plt.savefig(f"Data_Pipeline\Plots\shear_bending_diagrams.png", dpi=300)  # Save the figure as a PNG file
     
     
     # Plot 12: Deflection Curve
@@ -343,7 +347,7 @@ def main():
     plt.title("Deflection Curve of the Beam")
     plt.grid(True)
     plt.legend()
-    
+    plt.savefig(f"Data_Pipeline\Plots\deflection_curve.png", dpi=300)  # Save the figure as a PNG file
     
     # Plots 13-15: stacked heatmap subplots for axial strain, lateral strain, and shear strain across entire beam.
     # Create a grid covering the entire beam: x from 0 to L and y from -height/2 to height/2.
@@ -406,7 +410,7 @@ def main():
     axs[2].set_xlabel("Beam length, x (m)")
     axs[2].set_ylabel("Vertical position, y (m)")
     axs[2].set_title("Shear Strain Distribution Across Entire Beam", pad=12)
-
+    plt.savefig(f"Data_Pipeline\Plots\_heatmap_strain_distributions_entire_beam.png", dpi=300)  # Save the figure as a PNG file
     # 5) show
     plt.show()
 
