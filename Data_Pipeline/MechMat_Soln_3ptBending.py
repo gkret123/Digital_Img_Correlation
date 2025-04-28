@@ -29,17 +29,17 @@ NOTE: It will also be used to approximate whether the case puts the beam in the 
 enter a value for X_coord as the position along the beam where you want to analyze the bending moment, shear force, and deflection.
 The value of X_coord is the distance from the left end of the beam to the point where you want to analyze the bending moment, shear force, and deflection.
 """
-F_applied = 4000  # Applied force in Newtons (example value)
+F_applied = 10000  # Applied force in Newtons (example value)
 x_coord = 0.03 # Position along the beam in meters (example value, 6.25 cm)
 
 # Beam geometry and material properties
 
 L = 0.12  # Beam length in meters (12 cm) (measured)
-width = 0.019  # meters (measured)
-height = 0.019 # meters (measured)
+width = 0.1  # meters (measured)
+height = 0.1 # meters (measured)
         
 # Note: The inner dimensions are only used if the beam is hollow. write 'None' if the beam is solid.
-inner_width = 0.013 #measured
+inner_width = None #measured
 inner_height = inner_width  # meters 
 
 #known/estimated material properties
@@ -238,7 +238,7 @@ def main():
 
     plt.tight_layout(rect=[0, 0, 1, 0.95])  # leave space for suptitle
     plt.suptitle(f"Strain Distributions in Cross-Section\nat x = {x_coord:.4f} m", fontsize=16)
-    plt.savefig(f"Data_Pipeline\Plots\strain_distributions_x={x_coord:.4f} m.png", dpi=300)  # Save the figure as a PNG file
+    #plt.savefig(f"Data_Pipeline\Plots\strain_distributions_x={x_coord:.4f} m.png", dpi=300)  # Save the figure as a PNG file
     
     # Plot 4-6: Stress distributions vs. y in cross‐section
     fig, axs = plt.subplots(1, 3, figsize=(24, 10))
@@ -270,7 +270,7 @@ def main():
 
     plt.tight_layout(rect=[0, 0, 1, 0.95]) 
     plt.suptitle(f"Stress Distributions in Cross-Section\nat x = {x_coord:.4f} m", fontsize=16)
-    plt.savefig(f"Data_Pipeline\Plots\stress_distributions_x={x_coord:.4f} m.png", dpi=300)  # Save the figure as a PNG file
+    #plt.savefig(f"Data_Pipeline\Plots\stress_distributions_x={x_coord:.4f} m.png", dpi=300)  # Save the figure as a PNG file
     
     # Plots 6-9: Heatmaps at the cross‐section specified
     ny_cs, nz = 50, 50
