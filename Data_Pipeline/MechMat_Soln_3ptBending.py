@@ -48,8 +48,8 @@ inner_height = inner_width  # meters
 
 #known/estimated material properties
 poisson = 0.33  # Poisson's ratio (material property)
-E = 69e9      # Young's modulus in Pascals (example value for Aluminum 6061) (Material property)
-yield_strength = 276e6  # Yield strength in Pascals (example value for Aluminum 6061) (Material property)
+E = 69e9 # Young's modulus in Pascals (example value for Aluminum 6061) (Material property)
+yield_strength = 276e6 # Yield strength in Pascals (example value for Aluminum 6061) (Material property)
     
 G = E / (2 * (1 + poisson)) # Compute the shear modulus from Young's modulus and Poisson's ratio
 
@@ -163,7 +163,8 @@ def elastic_or_plastic(F_applied, I):
         print(f"The maximum bending stress is: {sigma_max/10**6} MPa, which is less than the yield strength of {yield_strength/10**6} MPa.")
         print(f"An applied load of {P_yield} N would cause the beam to cross into the plastic region.")
         return "Elastic"
-    
+
+#Helper function to plot strain profiles for axial, lateral, and shear strains
 def plot_strain_profiles(forces, y, x_coord, L, E, I, poisson, G):
     fig, axs = plt.subplots(1, 3, figsize=(24,10), sharey=True)
     for F in forces:
@@ -190,7 +191,8 @@ def plot_strain_profiles(forces, y, x_coord, L, E, I, poisson, G):
     plt.suptitle(f"Strain Profiles at x={x_coord:.3f} m")
     plt.tight_layout(rect=[0,0,1,0.95])
     plt.show()
-    
+
+#Helper function to plot stress profiles for axial, lateral, and shear stresses  
 def plot_stress_profiles(forces, y, x_coord, L, E, I, poisson):
     fig, axs = plt.subplots(1, 3, figsize=(24,10), sharey=True)
     for F in forces:
@@ -218,6 +220,7 @@ def plot_stress_profiles(forces, y, x_coord, L, E, I, poisson):
     plt.tight_layout(rect=[0,0,1,0.95])
     plt.show()
 
+#Helper function to plot shear and moment diagrams
 def plot_shear_moment(forces, L, E, I):
     x_beam = np.linspace(0, L, 200)
     fig, axes = plt.subplots(2, 1, figsize=(8,6), sharex=True)
@@ -230,7 +233,8 @@ def plot_shear_moment(forces, L, E, I):
     axes[1].set_title("Bending Moment Diagram"); axes[1].set_xlabel("x (m)"); axes[1].set_ylabel("M (Nm)"); axes[1].grid(True); axes[1].legend()
     plt.tight_layout()
     plt.show()
-    
+
+#Helper function to plot deflection curves
 def plot_deflection_curves(forces, L, E, I):
     x_beam = np.linspace(0, L, 200)
     plt.figure(figsize=(8,4))
