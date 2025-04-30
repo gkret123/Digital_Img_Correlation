@@ -19,6 +19,7 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import os
 
+
 """
 F_applied and X_coord are the user inputs for the loading condition at a specific x coordinate along the beam.
 enter a value for F_applied to specify the loading condition you wish to analyze.
@@ -29,7 +30,8 @@ NOTE: It will also be used to approximate whether the case puts the beam in the 
 enter a value for X_coord as the position along the beam where you want to analyze the bending moment, shear force, and deflection.
 The value of X_coord is the distance from the left end of the beam to the point where you want to analyze the bending moment, shear force, and deflection.
 """
-F_applied = 10000  # Applied force in Newtons (example value)
+F_applied = 4000  # Applied force in Newtons (example value), This should generally be the maximum force you apply to the beam.
+aditional_force_to_plot = [1000] #additional forces (generally less than the "applied force" that will be plotted along with the applied force to show the curves at different loading conditions.
 x_coord = 0.03 # Position along the beam in meters (example value, 6.25 cm)
 
 # Beam geometry and material properties
@@ -160,20 +162,97 @@ def elastic_or_plastic(F_applied, I):
         print(f"An applied load of {P_yield} N would cause the beam to cross into the plastic region.")
         return "Elastic"
     
+def plot_strain_profiles(forces, y, x_coord, L, E, I, poisson, G):
+    fig, axs = plt.subplots(1, 3, figsize=(24,10), sharey=True)
+    for F in forces:
+        M = bending_moment(x_coord, L, F)
+        V = shear_force(x_coord, L, F)
+        Epsilon_x = strain_distribution(y, M, E, I)
+        Epsilon_y = -poisson * Epsilon_x
+        τ  = shear_stress_distribution(y, V, width, height)
+        gamma  = τ / G
+        Epsilon_x_y = gamma / 2  # Shear strain (engineering shear strain)
+        # Plotting the strain distributions
+        axs[0].plot(Epsilon_x, y, label=f'εₓ, F={F:.0f}N')
+        axs[1].plot(Epsilon_y, y, label=f'εᵧ, F={F:.0f}N')
+        axs[2].plot(Epsilon_x_y, y,  label=f'εₓᵧ, F={F:.0f}N')
+    
+    axs[0].set_xlabel("Axial Strain, εₓ")
+    axs[1].set_xlabel("Lateral Strain, εᵧ")
+    axs[2].set_xlabel("Shear Strain, εₓᵧ")
+    axs[0].set_ylabel("y (m)")
+    for ax, title in zip(axs, ["Axial", "Lateral", "Shear"]):
+        ax.set_title(f"{title} Strain Distribution")
+        ax.grid(True)
+        ax.legend()
+    plt.suptitle(f"Strain Profiles at x={x_coord:.3f} m")
+    plt.tight_layout(rect=[0,0,1,0.95])
+    plt.show()
+    
+def plot_stress_profiles(forces, y, x_coord, L, E, I, poisson):
+    fig, axs = plt.subplots(1, 3, figsize=(24,10), sharey=True)
+    for F in forces:
+        M = bending_moment(x_coord, L, F)
+        V = shear_force(x_coord, L, F)
+        Epsilon_x = strain_distribution(y, M, E, I)
+        Epsilon_y = -poisson * Epsilon_x
+        Sigma_x = E * Epsilon_x
+        Sigma_y = E * Epsilon_y
+        Tau = shear_stress_distribution(y, V, width, height)
+        
+        axs[0].plot(Sigma_x, y, label=f'σₓ, F={F:.0f}N')
+        axs[1].plot(Sigma_y, y, label=f'σᵧ, F={F:.0f}N')
+        axs[2].plot(Tau,  y, label=f'τ,  F={F:.0f}N')
+    
+    axs[0].set_xlabel("σₓ (Pa)")
+    axs[1].set_xlabel("σᵧ (Pa)")
+    axs[2].set_xlabel("τ  (Pa)")
+    axs[0].set_ylabel("y (m)")
+    for ax, title in zip(axs, ["Normal", "Lateral", "Shear"]):
+        ax.set_title(f"{title} Stress Distribution")
+        ax.grid(True)
+        ax.legend()
+    plt.suptitle(f"Stress Profiles at x={x_coord:.3f} m")
+    plt.tight_layout(rect=[0,0,1,0.95])
+    plt.show()
 
+def plot_shear_moment(forces, L, E, I):
+    x_beam = np.linspace(0, L, 200)
+    fig, axes = plt.subplots(2, 1, figsize=(8,6), sharex=True)
+    for F in forces:
+        V = shear_force_array(x_beam, L, F)
+        M = bending_moment_array(x_beam, L, F)
+        axes[0].plot(x_beam, V, label=f'V(x), F={F:.0f} N')
+        axes[1].plot(x_beam, M, label=f'M(x), F={F:.0f} N')
+    axes[0].set_title("Shear Force Diagram");  axes[0].set_ylabel("V (N)"); axes[0].grid(True); axes[0].legend()
+    axes[1].set_title("Bending Moment Diagram"); axes[1].set_xlabel("x (m)"); axes[1].set_ylabel("M (Nm)"); axes[1].grid(True); axes[1].legend()
+    plt.tight_layout()
+    plt.show()
+    
+def plot_deflection_curves(forces, L, E, I):
+    x_beam = np.linspace(0, L, 200)
+    plt.figure(figsize=(8,4))
+    for F in forces:
+        v = deflection_array(x_beam, L, F, E, I)
+        plt.plot(x_beam, v, label=f'v(x), F={F:.0f} N')
+    plt.title("Deflection Curves")
+    plt.xlabel("x (m)")
+    plt.ylabel("v (m)")
+    plt.grid(True)
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
 
 def main():
     # the user inputs for the loading condition at a specific x coordinate along the beam (Force and x position) are defined above
-    
-    
+    forces = aditional_force_to_plot + [F_applied] # list of forces to plot
+
     # Calculate the moment of inertia
     I = compute_inertia(width, height, inner_width, inner_height)
     # Bending moment at the chosen x coordinate
     M = bending_moment(x_coord, L, F_applied)
     # Shear force at the chosen x coordinate
     V = shear_force(x_coord, L, F_applied)
-    
-    
     
     # Cross-Section Analysis
     
@@ -188,11 +267,12 @@ def main():
     # Shear stress distribution across the height
     tau = shear_stress_distribution(y, V, width, height)
     
+
     print("\nSample strain/stress values (every 10th point) at x = {:.4f} m:".format(x_coord))
     for i in range(0, len(y), 10):
         print(f"y = {y[i]:.4f} m, εₓ = {epsilon_x[i]:.6e}, εᵧ = {epsilon_y[i]:.6e}, σ = {sigma[i]:.6e} Pa, τ = {tau[i]:.6e} Pa")
     
-    print("\n--- Beam Analysis Results ---\n")
+    print(f"\n--- Beam Analysis Results for F_applied = {F_applied} ---\n")
     #bending region
     print("Understanding the beams elastic and plastic regions:\n")
     elastic_or_plastic(F_applied, I)
@@ -207,70 +287,10 @@ def main():
     delta_max = F_applied * L**3 / (48 * E * I)
     print(f"Maximum Deflection: {delta_max:.6e} m")
     
-
-
-    # Plot 1–3: Strains vs. y in cross‐section (axial, lateral, shear)
-    fig, axs = plt.subplots(1, 3, figsize=(24,10))
-    # Axial Strain
-    axs[0].plot(epsilon_x, y, 'b-', label='Axial Strain, εₓ')
-    axs[0].set_xlabel("Axial Strain, εₓ")
-    axs[0].set_ylabel("Vertical position, y (m)")
-    axs[0].set_title(f"Axial Strain Distribution (at x = {x_coord:.4f} m)")
-    axs[0].grid(True)
-    axs[0].legend()
-
-    # Lateral (bending) Strain
-    axs[1].plot(epsilon_y, y, 'g-', label='Lateral Strain, εᵧ')
-    axs[1].set_xlabel("Lateral Strain, εᵧ")
-    axs[1].set_ylabel("Vertical position, y (m)")
-    axs[1].set_title(f"Lateral Strain Distribution (at x = {x_coord:.4f} m)")
-    axs[1].grid(True)
-    axs[1].legend()
-
-    # Shear Strain
-    gamma = tau / G
-    axs[2].plot(gamma, y, 'm-', label='Shear Strain, εₓᵧ')
-    axs[2].set_xlabel("Shear Strain, εₓᵧ")
-    axs[2].set_ylabel("Vertical position, y (m)")
-    axs[2].set_title(f"Shear Strain Distribution (at x = {x_coord:.4f} m)")
-    axs[2].grid(True)
-    axs[2].legend()
-
-    plt.tight_layout(rect=[0, 0, 1, 0.95])  # leave space for suptitle
-    plt.suptitle(f"Strain Distributions in Cross-Section\nat x = {x_coord:.4f} m", fontsize=16)
-    #plt.savefig(f"Data_Pipeline\Plots\strain_distributions_x={x_coord:.4f} m.png", dpi=300)  # Save the figure as a PNG file
-    
-    # Plot 4-6: Stress distributions vs. y in cross‐section
-    fig, axs = plt.subplots(1, 3, figsize=(24, 10))
-
-    # Normal bending stress 
-    axs[0].plot(sigma, y, 'r-', label='σₓ (Pa)')
-    axs[0].set_xlabel("Normal Stress, σₓ (Pa)")
-    axs[0].set_ylabel("Vertical position, y (m)")
-    axs[0].set_title(f"Normal Stress Distribution\n(at x = {x_coord:.4f} m)")
-    axs[0].grid(True)
-    axs[0].legend()
-
-    # Lateral stress (Poisson effect)
-    sigma_y = E * epsilon_y
-    axs[1].plot(sigma_y, y, 'g-', label='σᵧ (Pa)')
-    axs[1].set_xlabel("Lateral Stress, σᵧ (Pa)")
-    axs[1].set_ylabel("Vertical position, y (m)")
-    axs[1].set_title(f"Lateral Stress Distribution\n(at x = {x_coord:.4f} m)")
-    axs[1].grid(True)
-    axs[1].legend()
-
-    # Shear stress 
-    axs[2].plot(tau, y, 'm-', label='τ (Pa)')
-    axs[2].set_xlabel("Shear Stress, τ (Pa)")
-    axs[2].set_ylabel("Vertical position, y (m)")
-    axs[2].set_title(f"Shear Stress Distribution\n(at x = {x_coord:.4f} m)")
-    axs[2].grid(True)
-    axs[2].legend()
-
-    plt.tight_layout(rect=[0, 0, 1, 0.95]) 
-    plt.suptitle(f"Stress Distributions in Cross-Section\nat x = {x_coord:.4f} m", fontsize=16)
-    #plt.savefig(f"Data_Pipeline\Plots\stress_distributions_x={x_coord:.4f} m.png", dpi=300)  # Save the figure as a PNG file
+    #Plots 1-3:
+    plot_strain_profiles(forces, y, x_coord, L, E, I, poisson, G)
+    #Plots 4-6:
+    plot_stress_profiles(forces, y, x_coord, L, E, I, poisson)
     
     # Plots 6-9: Heatmaps at the cross‐section specified
     ny_cs, nz = 50, 50
@@ -320,34 +340,11 @@ def main():
     V_beam = shear_force_array(x_beam, L, F_applied)
     v_beam = deflection_array(x_beam, L, F_applied, E, I)
     
-    
     # Plot 10-11: Shear and bending moment diagrams
-    fig, ax = plt.subplots(2, figsize=(6,4))
-    ax[0].plot(x_beam, V_beam, 'c-', label='Shear Force, V(x)')
-    ax[0].set_xlabel("Beam length, x (m)")
-    ax[0].set_ylabel("Shear Force, V (N)")
-    ax[0].set_title("Shear Force Diagram")
-    ax[0].grid(True)
-    ax[0].legend()
-    ax[1].plot(x_beam, M_beam, 'k-', label='Bending Moment, M(x)')
-    ax[1].set_xlabel("Beam length, x (m)")
-    ax[1].set_ylabel("Bending Moment, M (Nm)")
-    ax[1].set_title("Bending Moment Diagram")
-    ax[1].grid(True)
-    ax[1].legend()
-    plt.tight_layout()
-    plt.savefig(f"Data_Pipeline\Plots\shear_bending_diagrams.png", dpi=300)  # Save the figure as a PNG file
-    
+    plot_shear_moment(forces, L, E, I)
     
     # Plot 12: Deflection Curve
-    plt.figure(figsize=(12,10))
-    plt.plot(x_beam, v_beam, 'g-', label='Deflection, v(x)')
-    plt.xlabel("Beam length, x (m)")
-    plt.ylabel("Vertical Deflection, v (m)")
-    plt.title("Deflection Curve of the Beam")
-    plt.grid(True)
-    plt.legend()
-    plt.savefig(f"Data_Pipeline\Plots\deflection_curve.png", dpi=300)  # Save the figure as a PNG file
+    plot_deflection_curves(forces, L, E, I)
     
     # Plots 13-15: stacked heatmap subplots for axial strain, lateral strain, and shear strain across entire beam.
     # Create a grid covering the entire beam: x from 0 to L and y from -height/2 to height/2.
@@ -410,8 +407,6 @@ def main():
     axs[2].set_xlabel("Beam length, x (m)")
     axs[2].set_ylabel("Vertical position, y (m)")
     axs[2].set_title("Shear Strain Distribution Across Entire Beam", pad=12)
-    plt.savefig(f"Data_Pipeline\Plots\_heatmap_strain_distributions_entire_beam.png", dpi=300)  # Save the figure as a PNG file
-    # 5) show
     plt.show()
 
 if __name__ == "__main__":
