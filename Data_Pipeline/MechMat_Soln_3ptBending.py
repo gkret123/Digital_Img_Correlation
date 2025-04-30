@@ -31,7 +31,9 @@ enter a value for X_coord as the position along the beam where you want to analy
 The value of X_coord is the distance from the left end of the beam to the point where you want to analyze the bending moment, shear force, and deflection.
 """
 F_applied = 4000  # Applied force in Newtons (example value), This should generally be the maximum force you apply to the beam.
-aditional_force_to_plot = [1000] #additional forces (generally less than the "applied force" that will be plotted along with the applied force to show the curves at different loading conditions.
+
+#For additional forces, enter a LIST of forces to be plotted along with the applied force. If you do not want to plot any additional forces, leave this as None or an empty list.
+additional_force_to_plot = [] #additional forces (generally less than the "applied force" that will be plotted along with the applied force to show the curves at different loading conditions.
 x_coord = 0.03 # Position along the beam in meters (example value, 6.25 cm)
 
 # Beam geometry and material properties
@@ -245,7 +247,11 @@ def plot_deflection_curves(forces, L, E, I):
 
 def main():
     # the user inputs for the loading condition at a specific x coordinate along the beam (Force and x position) are defined above
-    forces = aditional_force_to_plot + [F_applied] # list of forces to plot
+
+    if type(additional_force_to_plot) == type(None) or additional_force_to_plot == []:
+        forces = [F_applied] # list of forces to plot
+    else:
+        forces = additional_force_to_plot + [F_applied] # list of forces to plot
 
     # Calculate the moment of inertia
     I = compute_inertia(width, height, inner_width, inner_height)
