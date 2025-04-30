@@ -33,7 +33,7 @@ The value of X_coord is the distance from the left end of the beam to the point 
 F_applied = 4000  # Applied force in Newtons (example value), This should generally be the maximum force you apply to the beam.
 
 #For additional forces, enter a LIST of forces to be plotted along with the applied force. If you do not want to plot any additional forces, leave this as None or an empty list.
-additional_force_to_plot = [] #additional forces (generally less than the "applied force" that will be plotted along with the applied force to show the curves at different loading conditions.
+additional_force_to_plot = [1000] #additional forces (generally less than the "applied force" that will be plotted along with the applied force to show the curves at different loading conditions.
 x_coord = 0.03 # Position along the beam in meters (example value, 6.25 cm)
 
 # Beam geometry and material properties
