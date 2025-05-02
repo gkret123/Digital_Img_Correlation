@@ -39,11 +39,11 @@ x_coord = 0.03 # Position along the beam in meters (example value, 6.25 cm)
 # Beam geometry and material properties
 
 L = 0.12  # Beam length in meters (12 cm) (measured)
-width = 0.1  # meters (measured)
-height = 0.1 # meters (measured)
+width = 0.01905 # meters (measured)
+height = 0.01905 # meters (measured)
         
 # Note: The inner dimensions are only used if the beam is hollow. write 'None' if the beam is solid.
-inner_width = None #measured
+inner_width = 0.013 #measured
 inner_height = inner_width  # meters 
 
 #known/estimated material properties
@@ -188,8 +188,10 @@ def plot_strain_profiles(forces, y, x_coord, L, E, I, poisson, G):
         ax.set_title(f"{title} Strain Distribution")
         ax.grid(True)
         ax.legend()
+        ax.tick_params(axis='x', rotation=45)  # Rotate x-tick labels by 45 degrees
+    
     plt.suptitle(f"Strain Profiles at x={x_coord:.3f} m")
-    plt.tight_layout(rect=[0,0,1,0.95])
+    plt.tight_layout(rect=[0.0125,0,1,0.95]) 
     plt.show()
 
 #Helper function to plot stress profiles for axial, lateral, and shear stresses  
@@ -217,7 +219,7 @@ def plot_stress_profiles(forces, y, x_coord, L, E, I, poisson):
         ax.grid(True)
         ax.legend()
     plt.suptitle(f"Stress Profiles at x={x_coord:.3f} m")
-    plt.tight_layout(rect=[0,0,1,0.95])
+    plt.tight_layout(rect=[0.0125,0,1,0.95])
     plt.show()
 
 #Helper function to plot shear and moment diagrams
@@ -240,10 +242,10 @@ def plot_deflection_curves(forces, L, E, I):
     plt.figure(figsize=(8,4))
     for F in forces:
         v = deflection_array(x_beam, L, F, E, I)
-        plt.plot(x_beam, v, label=f'v(x), F={F:.0f} N')
+        plt.plot(x_beam, v, label=f'δ(x), F={F:.0f} N')
     plt.title("Deflection Curves")
     plt.xlabel("x (m)")
-    plt.ylabel("v (m)")
+    plt.ylabel("δ (m)")
     plt.grid(True)
     plt.legend()
     plt.tight_layout()
