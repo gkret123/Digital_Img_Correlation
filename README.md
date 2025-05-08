@@ -57,3 +57,9 @@ For further questions or support, contact:
 # File Structure
 
 TBD
+
+# License
+## License
+
+- Code is licensed under the [MIT License](./LICENSE).
+- Documentation and data are licensed under [Creative Commons Attribution 4.0 International (CC BY 4.0)](./LICENSE.content).
