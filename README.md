@@ -59,7 +59,6 @@ For further questions or support, contact:
 TBD
 
 # License
-## License
-
+This project is dual-licensed:
 - Code is licensed under the [MIT License](./LICENSE).
 - Documentation and data are licensed under [Creative Commons Attribution 4.0 International (CC BY 4.0)](./LICENSE.content).
