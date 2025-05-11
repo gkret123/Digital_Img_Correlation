@@ -60,16 +60,16 @@ F_applied = 4000  # Applied force in Newtons (example value), This should genera
 
 #For additional forces, enter a LIST of forces to be plotted along with the applied force. If you do not want to plot any additional forces, leave this as None or an empty list.
 additional_force_to_plot = [1000] #additional forces (generally less than the "applied force" that will be plotted along with the applied force to show the curves at different loading conditions.
-x_coord = 0.03 # Position along the beam in meters (example value, 6.25 cm)
+x_coord = 0.09 # Position along the beam in meters (example value, 6.25 cm) starting from the LEFT support.
 
 # Beam geometry and material properties
 
 L = 0.12  # Beam length in meters (12 cm) (measured)
 width = 0.01905 # meters (measured)
-height = 0.01905 # meters (measured)
+height = width # meters (measured)
         
 # Note: The inner dimensions are only used if the beam is hollow. write 'None' if the beam is solid.
-inner_width = 0.013 #measured
+inner_width = 0.0127 #measured
 inner_height = inner_width  # meters 
 
 #known/estimated material properties
@@ -156,7 +156,7 @@ def shear_stress_distribution(y, V, width, height):
     For a rectangular beam:
       τ(y) = (3/2)*(V/(width*height))*(1 - (2*y/height)**2)
     """
-    return (3/2) * (V / (width * height)) * (1 - (2 * y / height)**2)
+    return (3/2) * (-V / (width * height)) * (1 - (2 * y / height)**2)
     
 def elastic_or_plastic(F_applied, I):
     
@@ -214,8 +214,8 @@ def plot_strain_profiles(forces, y, x_coord, L, E, I, poisson, G):
         ax.set_title(f"{title} Strain Distribution")
         ax.grid(True)
         ax.legend()
-        ax.tick_params(axis='x', rotation=45)  # Rotate x-tick labels by 45 degrees
-    
+        ax.tick_params(axis='x', rotation=45, labelsize = 16)  # Rotate x-tick labels by 45 degrees
+        ax.tick_params(axis='y', labelsize = 16)  
     plt.suptitle(f"Strain Profiles at x={x_coord:.3f} m")
     plt.tight_layout(rect=[0.0125,0,1,0.95]) 
     plt.show()
@@ -270,8 +270,10 @@ def plot_deflection_curves(forces, L, E, I):
         v = deflection_array(x_beam, L, F, E, I)
         plt.plot(x_beam, v, label=f'δ(x), F={F:.0f} N')
     plt.title("Deflection Curves")
-    plt.xlabel("x (m)")
-    plt.ylabel("δ (m)")
+    plt.xlabel("x (m)", fontsize = 16)
+    plt.ylabel("δ (m)", fontsize = 16)
+    plt.tick_params(axis = 'x', rotation=45, labelsize = 16)  
+    plt.tick_params(axis = 'y', labelsize = 16)
     plt.grid(True)
     plt.legend()
     plt.tight_layout()
