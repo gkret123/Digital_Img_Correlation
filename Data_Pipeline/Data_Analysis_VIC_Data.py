@@ -1,4 +1,8 @@
 """
+NOT USED FOR FINAL RESULTING PROJECT
+
+
+
  Data Analysis Script for Module 3 Project
 Team A2: Digital Image Correlation
 Authors: Gabriel Kret, Maria Alvarado, Jonas Margono
