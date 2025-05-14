@@ -11,86 +11,84 @@ The project integrates:
 - Finite Element Analysis (FEA) using SolidWorks
 
 ## Repository Structure
-├── Data_Pipeline
-|     ├── DIC_CrossSection_Analysis
-|     |     ├── DIC Data.zip
-|     |     ├── HollowBox_Compare_Exx_Exy.py
-|     |     ├── LargeBox_Compare_Exx_Exy.py
-|     |     ├── SmallBox_Compare_Exx_Exy.py
-|     ├── DIC_DataProcessing_MATLAB
-|     |     ├── DIC_DataProcessing.m
-|     |     ├── HollowBox
-|     |     |     ├── DIC_DataProcessing_HollowBoxAluminum.m
-|     |     |     ├── DIC_HollowBox_1000N.xlsx
-|     |     |     ├── DIC_HollowBox_4000N.xlsx
-|     |     ├── LargeBox
-|     |     |     ├── DIC_DataProcessing_LargeBoxAluminum.m
-|     |     |     ├── DIC_LargeBox_1000N.xlsx
-|     |     |     ├── DIC_LargeBox_4000N.xlsx
-|     |     ├── SmallBox
-|     |     |     ├── DIC_DataProcessing_SmallBoxAluminum.m
-|     |     |     ├── DIC_SmallBox_1000N.xlsx
-|     |     |     ├── DIC_SmallBox_4000N.xlsx
-|     ├── MechMat_Soln_3ptBending.py
-|     ├── Python Line Data Extraction
-|     |     ├── Data_Analysis_VIC_Data.py
-|     |     ├── Image_Data
-|     |     |     ├── Image_0_Data_0N.csv
-|     |     |     ├── Image_1_Data_38N.csv
-|     |     |     ├── Image_2_Data_92N.csv
-|     |     |     ├── Image_3_Data_140N.csv
-|     |     |     ├── Image_4_Data_183N.csv
-|     |     |     ├── Image_5_Data_226N.csv
-|     |     |     ├── Image_6_Data_nanN.csv
-|     |     |     ├── Stacked_Force_Data
-|     |     |     |     ├── Image_0_Stacked_Force.csv
-|     |     |     |     ├── Image_1_Stacked_Force.csv
-|     |     |     |     ├── Image_2_Stacked_Force.csv
-|     |     |     |     ├── Image_3_Stacked_Force.csv
-|     |     |     |     ├── Image_4_Stacked_Force.csv
-|     |     |     |     ├── Image_5_Stacked_Force.csv
-|     |     |     |     ├── Image_6_Stacked_Force.csv
-|     |     |     |     ├── ff_all_images_stacked_Force_keys.json
-|     |     |     ├── Stacked_line_Data
-|     |     |     |     ├── ff_all_images_stacked_L_keys.json
-|     |     |     |     ├── ff_image_L0_Stacked_Force.csv
-|     |     |     |     ├── ff_image_L1_Stacked_Force.csv
-|     |     |     |     ├── ff_image_L2_Stacked_Force.csv
-|     |     |     |     ├── ff_image_L3_Stacked_Force.csv
-|     |     |     |     ├── ff_image_L4_Stacked_Force.csv
-|     |     |     |     ├── ff_image_L5_Stacked_Force.csv
-|     |     |     |     ├── ff_image_L6_Stacked_Force.csv
-|     |     |     |     ├── ff_image_L7_Stacked_Force.csv
-|     |     |     |     ├── ff_image_L8_Stacked_Force.csv
-|     |     |     |     ├── ff_image_L9_Stacked_Force.csv
-|     |     ├── Input_Data
-|     |     |     ├── Extracted Data from VIC-EDU_Poly.csv
-|     |     ├── Plots
-|     |     |     ├── _heatmap_strain_distributions_entire_beam.png
-|     |     |     ├── deflection_curve.png
-|     |     |     ├── shear_bending_diagrams.png
-|     |     |     ├── strain_distributions_x=0.0300 m.png
-|     |     |     ├── stress_distributions_x=0.0300 m.png
-|     |     ├── Preprocessing_VIC_Data.py
-|     ├── __pycache__
-|     |     ├── MechMat_Plot_Helper_Funcs.cpython-312.pyc
-|     |     ├── MechMat_Soln_3ptBending.cpython-312.pyc
-|     |     ├── Preprocessing_VIC_Data.cpython-312.pyc
-|     ├── tempCodeRunnerFile.py
-├── Documentation
-|     ├── A2_Alvarado_Kret_Margono_BOM_DIC.xlsx
-|     ├── A2_M3_DIC_ReportFinal_Alvardo_Kret_Margono.pdf
-|     ├── A2_M3_FinalPresentation_DIC.pptx
-|     ├── A2_M3_Report_Final_Alvardo_Kret_Margono.docx
-|     ├── Flowdiagram Measurements.pptx
-|     ├── Kret_Alvarado_Margono_DIC_M3_Project_Definition_Updated_2.3.2025.pptx
-|     ├── Materials Research.xlsx
-|     ├── VIC-EDU_2022.pdf
-|     ├── VIC-EDU_manual_2024_digital.pdf
-├── LICENSE.docs
-├── LICENSE.md
-├── README.md
+## Repository Structure
 
+- `Data_Pipeline/`
+  - `DIC_CrossSection_Analysis/`
+    - `DIC Data.zip`
+    - `HollowBox_Compare_Exx_Exy.py`
+    - `LargeBox_Compare_Exx_Exy.py`
+    - `SmallBox_Compare_Exx_Exy.py`
+  - `DIC_DataProcessing_MATLAB/`
+    - `DIC_DataProcessing.m`
+    - `HollowBox/`
+      - `DIC_DataProcessing_HollowBoxAluminum.m`
+      - `DIC_HollowBox_1000N.xlsx`
+      - `DIC_HollowBox_4000N.xlsx`
+    - `LargeBox/`
+      - `DIC_DataProcessing_LargeBoxAluminum.m`
+      - `DIC_LargeBox_1000N.xlsx`
+      - `DIC_LargeBox_4000N.xlsx`
+    - `SmallBox/`
+      - `DIC_DataProcessing_SmallBoxAluminum.m`
+      - `DIC_SmallBox_1000N.xlsx`
+      - `DIC_SmallBox_4000N.xlsx`
+  - `MechMat_Soln_3ptBending.py`
+  - `Python Line Data Extraction/`
+    - `Data_Analysis_VIC_Data.py`
+    - `Image_Data/`
+      - `Image_0_Data_0N.csv`
+      - `Image_1_Data_38N.csv`
+      - `Image_2_Data_92N.csv`
+      - `Image_3_Data_140N.csv`
+      - `Image_4_Data_183N.csv`
+      - `Image_5_Data_226N.csv`
+      - `Image_6_Data_nanN.csv`
+      - `Stacked_Force_Data/`
+        - `Image_0_Stacked_Force.csv`
+        - `Image_1_Stacked_Force.csv`
+        - `Image_2_Stacked_Force.csv`
+        - `Image_3_Stacked_Force.csv`
+        - `Image_4_Stacked_Force.csv`
+        - `Image_5_Stacked_Force.csv`
+        - `Image_6_Stacked_Force.csv`
+        - `ff_all_images_stacked_Force_keys.json`
+      - `Stacked_line_Data/`
+        - `ff_all_images_stacked_L_keys.json`
+        - `ff_image_L0_Stacked_Force.csv`
+        - `ff_image_L1_Stacked_Force.csv`
+        - `ff_image_L2_Stacked_Force.csv`
+        - `ff_image_L3_Stacked_Force.csv`
+        - `ff_image_L4_Stacked_Force.csv`
+        - `ff_image_L5_Stacked_Force.csv`
+        - `ff_image_L6_Stacked_Force.csv`
+        - `ff_image_L7_Stacked_Force.csv`
+        - `ff_image_L8_Stacked_Force.csv`
+        - `ff_image_L9_Stacked_Force.csv`
+    - `Input_Data/`
+      - `Extracted Data from VIC-EDU_Poly.csv`
+    - `Plots/`
+      - `_heatmap_strain_distributions_entire_beam.png`
+      - `deflection_curve.png`
+      - `shear_bending_diagrams.png`
+      - `strain_distributions_x=0.0300 m.png`
+      - `stress_distributions_x=0.0300 m.png`
+    - `Preprocessing_VIC_Data.py`
+
+- `Documentation/`
+  - `A2_Alvarado_Kret_Margono_BOM_DIC.xlsx`
+  - `A2_M3_DIC_ReportFinal_Alvardo_Kret_Margono.pdf`
+  - `A2_M3_FinalPresentation_DIC.pptx`
+  - `A2_M3_Report_Final_Alvardo_Kret_Margono.docx`
+  - `Flowdiagram Measurements.pptx`
+  - `Kret_Alvarado_Margono_DIC_M3_Project_Definition_Updated_2.3.2025.pptx`
+  - `Materials Research.xlsx`
+  - `VIC-EDU_2022.pdf`
+  - `VIC-EDU_manual_2024_digital.pdf`
+
+- `LICENSE.docs`
+- `LICENSE.md`
+- `README.md`
 
 ## Experimental Setup
 
