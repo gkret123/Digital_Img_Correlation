@@ -11,8 +11,6 @@ The project integrates:
 - Finite Element Analysis (FEA) using SolidWorks
 
 ## Repository Structure
-## Repository Structure
-
 - `Data_Pipeline/`
   - `DIC_CrossSection_Analysis/`
     - `DIC Data.zip`
